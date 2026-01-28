@@ -51,5 +51,86 @@ Esta funcion me da contantemente un numero entre o y 1, esta funcion como tal no
 
  ### Actividad 4
  
+Codigo de la desviacion estandar visualizada `X` y `Y`
+```
+function setup() {
+  createCanvas(640, 550);
+  background(163, 227, 178);
+}
+
+function draw() {
+  let x = randomGaussian(320, 80);
+  let y = randomGaussian(220, 80);
+  noStroke();
+  fill(0, 100);
+  circle(x, y, 10);
+}
+
+```
+<img width="1592" height="1285" alt="image" src="https://github.com/user-attachments/assets/44c97bf9-85e3-480d-a616-5a2cd16c5921" />
+
+Enlace a p5.js: https://editor.p5js.org/juanpa1103/sketches/yGfUvzje9
+
+### Actividad 5
+
+Seleccione la caminata random normal y aplique esta tecnica de salto para que el punto se se moviera aleatoriamente como antes lo hacia pero en esta ocasion dando saltos para que haga un recorrido mas amplio.
+
+```
+let walker;
+
+function setup() {
+  createCanvas(640, 550);
+  walker = new Walker();
+  background(118, 149, 168);
+}
+
+function draw() {
+  walker.step();
+  walker.show();
+}
+
+class Walker {
+  constructor() {
+    this.x = width / 2;
+    this.y = height / 2;
+  }
+
+  show() {
+    noStroke();
+    circle(this.x, this.y, 3);
+  }
+
+  step() {
+    let stepSize = levy() * 20; // controla qué tan lejos puede saltar
+    let angle = random(TWO_PI);
+
+    this.x += cos(angle) * stepSize;
+    this.y += sin(angle) * stepSize;
+
+    this.x = constrain(this.x, 0, width);
+    this.y = constrain(this.y, 0, height);
+  }
+}
+
+function levy() {
+  while (true) {
+    let r1 = random(1);
+    let r2 = random(1);
+    if (r2 < r1) {
+      return r1;
+    }
+  }
+}
+```
+![Unidad1_Act5](https://github.com/user-attachments/assets/05784cc4-6347-499f-9e7d-31ccf047cd58)
+
+Enlace a p5.js: https://editor.p5js.org/juanpa1103/sketches/0SF-UybIO
+
+### Actividad 6
+
+
+
+
+
 
 
