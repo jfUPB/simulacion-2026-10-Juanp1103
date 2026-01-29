@@ -128,9 +128,59 @@ Enlace a p5.js: https://editor.p5js.org/juanpa1103/sketches/0SF-UybIO
 
 ### Actividad 6
 
+La idea que tenia en mente es modificar el codigo de random walk con el ruido de perlin creando un nuevo ruido, este ruido modifica el tamaño y color del circulo, dependiendo de la posicion en y que se encuentre, esto hace que los ciculos en la parte superior sean mas pequeños y en la inferior mas grandes, al mismo tiempo crea un degradado de color verticalmente.
+
+Codigo:
+```
+let walker;
+
+function setup() {
+  createCanvas(640, 580);
+  walker = new Walker();
+  background(255);
+}
+
+function draw() {
+  walker.step();
+  walker.show();
+}
+
+class Walker {
+  constructor() {
+    this.tx = 0;
+    this.ty = 10000;
+  }
+
+  step() {
+    //{!2} x- and y-position mapped from noise
+    this.x = map(noise(this.tx), 0, 1, 0, width);
+    this.y = map(noise(this.ty), 0, 1, 0, height);
+
+    //{!2} Move forward through “time.”
+    this.tx += 0.01;
+    this.ty += 0.01;
+  }
+
+  show() {
+  let c = map(noise(this.ty), 0, 1, 50, 200);
+  stroke(0,30);
+  fill(c, 100, 150, 70);
+  circle(this.x, this.y, c);
+}
+}
+```
+![Unidad1_Act6](https://github.com/user-attachments/assets/8f8c769f-10fd-479f-b47e-dc0e69070e0b)
+
+Enlace a p5.js: https://editor.p5js.org/juanpa1103/sketches/_cj5wGosk
+
+## Aplicacion
+
+### Actividad 7
 
 
 
+## Reflexion
 
+### Actividad 8
 
 
