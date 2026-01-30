@@ -271,7 +271,8 @@ En el arte generativo, la aleatoriedad no se usa como caos puro, sino como un ma
 
 utilicé el Lévy flight como uno de los conceptos de aleatoriedad principales. Esta forma de aleatoriedad se caracteriza porque la mayoría de los movimientos son pequeños y locales, pero de manera ocasional ocurren saltos grandes y poco probables. Elegí este tipo de aleatoriedad porque me permitió evitar un comportamiento repetitivo y demasiado predecible. Si el sistema solo se movía con pasos pequeños y constantes, la imagen tendía a concentrarse siempre en las mismas zonas del espacio. Con el Lévy flight, el sistema podía explorar nuevas áreas de forma inesperada
 
--¿Qué es un “paseo” o “caminata” (walk) en el contexto de la simulación? ¿Qué característica particular tiene una caminata de tipo “Lévy flight”?
+- ¿Qué es un “paseo” o “caminata” (walk) en el contexto de la simulación? ¿Qué característica particular tiene una caminata de tipo “Lévy flight”?
 
 Una caminata (walk) es un modelo de movimiento en el que una entidad cambia su posición paso a paso siguiendo ciertas reglas. En cada iteración, el nuevo estado depende del estado anterior y de algún proceso de decisión, que puede ser determinista, aleatorio o una combinación de ambos.
 Una caminata de tipo Lévy flight se caracteriza por usar una distribución de probabilidad no uniforme para el tamaño de los pasos. La mayoría de los movimientos son cortos y locales, pero de manera ocasional aparecen saltos muy largos. Estos saltos no son errores, sino una parte esencial del modelo: aunque son poco probables, tienen un impacto grande en la trayectoria.
+
