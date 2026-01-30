@@ -177,10 +177,101 @@ Enlace a p5.js: https://editor.p5js.org/juanpa1103/sketches/_cj5wGosk
 
 ### Actividad 7
 
+- El arte generativo es cuando se crea una obra, pero a diferencia del arte tradicional no se sabe o se puede predecir el resultado, ademas el resultado siempre es variable, lo mas importante del arte generativo son las reglas y normas que se usan, para crear la obra, en la mayoria de las veces se utiliza el azar como un factor importante en esta generacion, sin embargo no se le entrega todo el control sino que el artista debe pensar como y cuando va a usar este azar para que sea controlado y se obtengan resultados deseados
 
+Codigo:
+```
+let particles = [];
+let zoff = 0;
+
+function setup() {
+  createCanvas(740, 540);
+  background(0);
+  
+
+  // crear partículas
+  for (let i = 0; i < 2000; i++) {
+    particles.push(createVector(random(width), random(height)));
+  }
+}
+
+function draw() {
+  // fondo con alpha para dejar rastro
+  stroke(50, 98, 162);
+  fill(149, 181, 62,20);
+  rect(0, 0, width, height);
+
+  let noiseScale = map(mouseY, 0, height, 0.002, 0.02);
+  let fieldStrength = map(mouseX, 0, width, 0.5, 3);
+
+  for (let p of particles) {
+    // ruido Perlin
+    let n = noise(p.x * noiseScale, p.y * noiseScale, zoff);
+    let angle = n * TWO_PI * fieldStrength;
+
+    // distribución normal
+    angle += randomGaussian() * 0.01;
+
+    // movimiento base
+    p.x += cos(angle);
+    p.y += sin(angle);
+
+    // Lévy flight
+    if (random(1) < 0.007) {
+      let jumpSize = levy() * 100;
+      p.x += cos(angle) * jumpSize;
+      p.y += sin(angle) * jumpSize;
+    }
+
+    // envolver bordes
+    p.x = (p.x + width) % width;
+    p.y = (p.y + height) % height;
+
+    // dibujar
+    stroke(96, 28, 156, 40);
+    fill(96, 28, 156,10)
+    circle(p.x, p.y,1.5);
+  }
+
+  zoff += 0.005;
+}
+
+// Accept–Reject → Lévy flight
+function levy() {
+  while (true) {
+    let r1 = random(1);
+    let r2 = random(1);
+    if (r2 < r1) {
+      return r1;
+    }
+  }
+}
+```
+<img width="1816" height="1337" alt="image" src="https://github.com/user-attachments/assets/9f1c23dd-97dd-4f0b-a107-ac02ac293e2e" />
+
+Enlace a P5.js: https://editor.p5js.org/juanpa1103/sketches/x6Ut7NzsX
 
 ## Reflexion
 
 ### Actividad 8
 
+- Describe la diferencia fundamental entre la aleatoriedad generada por `random()` y la apariencia de aleatoriedad del Ruido Perlin `noise()`. ¿En qué tipo de situación usarías cada una?
 
+La diferencia mas importante es que la alietoriedad generada por random no tiene un orden aparente ni control, mientras la generada por noise se controla dandole un poco de continuidad al siguiente numero limitandolo a que sea aleatorio si pero cercano al numero anterior.
+
+- Explica con tus palabras qué es una distribución de probabilidad. ¿Qué diferencia visual produce una caminata aleatoria con una distribución uniforme versus una con una distribución normal?
+
+En una caminata aleatoria con distribución uniforme, todos los posibles pasos tienen la misma probabilidad de ocurrir. Visualmente, esto produce un movimiento más errático y disperso. En cambio, en una caminata aleatoria con distribución normal, la mayoría de los pasos se concentran alrededor de un valor promedio y los pasos extremos son poco frecuentes. Visualmente, el movimiento se percibe más suave y orgánico.
+
+- ¿Cuál es el papel de la aleatoriedad en el arte generativo? Menciona al menos dos funciones distintas que cumple
+
+En el arte generativo, la aleatoriedad no se usa como caos puro, sino como un material creativo controlado dentro de un sistema de reglas. Una de las funciones es introducir variación. La aleatoriedad evita que el sistema produzca siempre el mismo resultado, permitiendo que cada ejecución de la obra sea distinta. Otra funcionalidad es romper patrones y producir sorpresa. Incluso en sistemas muy estructurados, la aleatoriedad permite que ocurran eventos inesperados.
+
+- Piensa en tu obra final (Actividad 07). Describe uno de los conceptos de aleatoriedad que usaste y explica por qué fue una elección adecuada para lograr el efecto que buscabas.
+
+utilicé el Lévy flight como uno de los conceptos de aleatoriedad principales. Esta forma de aleatoriedad se caracteriza porque la mayoría de los movimientos son pequeños y locales, pero de manera ocasional ocurren saltos grandes y poco probables. Elegí este tipo de aleatoriedad porque me permitió evitar un comportamiento repetitivo y demasiado predecible. Si el sistema solo se movía con pasos pequeños y constantes, la imagen tendía a concentrarse siempre en las mismas zonas del espacio. Con el Lévy flight, el sistema podía explorar nuevas áreas de forma inesperada
+
+-¿Qué es un “paseo” o “caminata” (walk) en el contexto de la simulación? ¿Qué característica particular tiene una caminata de tipo “Lévy flight”?
+
+Una caminata (walk) es un modelo de movimiento en el que una entidad cambia su posición paso a paso siguiendo ciertas reglas. En cada iteración, el nuevo estado depende del estado anterior y de algún proceso de decisión, que puede ser determinista, aleatorio o una combinación de ambos.
+Una caminata de tipo Lévy flight se caracteriza por usar una distribución de probabilidad no uniforme para el tamaño de los pasos. La mayoría de los movimientos son cortos y locales, pero de manera ocasional aparecen saltos muy largos. Estos saltos no son errores, sino una parte esencial del modelo: aunque son poco probables, tienen un impacto grande en la trayectoria.
