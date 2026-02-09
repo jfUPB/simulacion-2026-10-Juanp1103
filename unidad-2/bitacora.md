@@ -48,10 +48,39 @@ class Walker {
 
 - Espero que en este codigo no haga mucho, solo nos pinta la pantalla de un color y nos imprime una posicion, esta posicion luego se modifica y nos muestra como cambia las coordenadas de `(6,9)` a `(20,30)`.
 - El resultado obtenido es el esperado.
-- En el paso por valor, se da un valor pero este no me modifica el valor de la funcion original, en el paso por referencia se 
+- En el paso por valor, se da una valor fijo, al momento de entregarlo a una funcion este valor se mantiene y se crea una copia que no modifica el valor original, en el paso por referencia se toma la referencia del objeto como tal en el caso del codigo el vector, esto en memoria nos envia al mismo espacio sin crearnos una copia por lo que los valores originales se modifican.
+- en el codigo se hace paso por referencia ya que nos envia a la posicion del objeto que seria el vector.
+- Aprendí que los objetos en JavaScript, como los vectores, se pasan por referencia, por lo que las funciones pueden modificar directamente su estado.
+
+### Actividad 5
+
+- ¿Para qué sirve mag()?:
+
+  Devuelve la longitud (magnitud) de un vector, la diferencia con magSq() es que esta devuelve la magnitud al cuadrado.
+- ¿Para qué sirve normalize()?
+
+  Convierte el vector en uno de longitud 1, manteniendo su dirección.
+- ¿para qué sirve dot()?
+
+  Sirve para saber qué tan alineados están dos vectores.
+- Diferencia entre dot() estático y de instancia
+
+  No hay diferencia matemática; solo cambia la forma de llamarlo.
+-  ¿Cuál es la interpretación geométrica del producto cruz de dos vectores?
+
+  Produce un vector perpendicular a los dos originales; su magnitud representa el área del paralelogramo y su dirección depende del orden (orientación).
+- ¿Para qué sirve dist()?
+
+  Para medir la distancia entre dos puntos o vectores.
+- ¿Para qué sirve limit()?
+
+  Sirve para restringir la magnitud máxima del vector
+
+### Avtividad 6
 
 ## Bitácora de aplicación 
 
 
 
 ## Bitácora de reflexión
+
