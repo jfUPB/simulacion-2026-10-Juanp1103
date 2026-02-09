@@ -78,9 +78,71 @@ class Walker {
 
 ### Avtividad 6
 
+Codigo:
+
+```
+let t = 0;
+let speed = 0.005;
+
+function setup() {
+    createCanvas(660, 550);
+}
+
+function draw() {
+    background(200);
+
+    let v0 = createVector(50, 50);
+    let v1 = createVector(530, 0);
+    let v2 = createVector(0, 430);
+  
+    // t va de 0 a 1 y vuelve
+  t += speed;
+  if (t > 1 || t < 0) {
+    speed *= -1;
+  }
+  
+  let v3 = p5.Vector.lerp(v1, v2, t);
+  
+  let c = lerpColor(color(255, 0,0), color(0, 0, 255), t);
+  
+    drawArrow(v0, v1, 'red');
+    drawArrow(v0, v2, 'blue');
+    drawArrow(v0, v3, c);
+    drawArrow(  p5.Vector.add(v0, v1),  p5.Vector.sub(v2, v1), 'green')
+  
+}
+
+function drawArrow(base, vec, myColor) {
+    push();
+    stroke(myColor);
+    strokeWeight(3);
+    fill(myColor);
+    translate(base.x, base.y);
+    line(0, 0, vec.x, vec.y);
+    rotate(vec.heading());
+    let arrowSize = 7;
+    translate(vec.mag() - arrowSize, 0);
+    triangle(0, arrowSize / 2, 0, -arrowSize / 2, arrowSize, 0);
+    pop();
+}
+```
+link a p5.js: https://editor.p5js.org/juanpa1103/sketches/fl9HqNAxz
+- ¿Cómo funciona `lerp()`?
+
+`lerp()` calcula un valor intermedio entre dos valores o vectores usando un parámetro t entre 0 y 1.
+
+- ¿Cómo funciona `lerpColor()`?
+
+`lerpColor()` mezcla dos colores de forma lineal según un parámetro t entre 0 y 1.
+
+- ¿Cómo se dibuja una flecha usando drawArrow()?
+
+La flecha se dibuja trasladando el origen al punto base, dibujando una línea con la longitud del vector y rotando un triángulo para indicar su dirección.
+
 ## Bitácora de aplicación 
 
 
 
 ## Bitácora de reflexión
+
 
