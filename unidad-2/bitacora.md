@@ -139,10 +139,44 @@ link a p5.js: https://editor.p5js.org/juanpa1103/sketches/fl9HqNAxz
 
 La flecha se dibuja trasladando el origen al punto base, dibujando una línea con la longitud del vector y rotando un triángulo para indicar su dirección.
 
+### Actividad 7
+
+El concepto fundamental de motion 101 es que un objeto se mueve actualizando su posición según su velocidad en cada instante. Es decir, en cada paso del tiempo:
+
+- El objeto tiene una posición.
+- Tiene una velocidad (que indica hacia dónde y qué tan rápido se mueve).
+- La nueva posición se obtiene “sumando” la velocidad a la posición anterior.
+
+Geométricamente, todo se entiende en el plano como flechas (vectores):
+
+- La posición: La posición es un punto en el plano, que puede imaginarse como una flecha que va desde el origen (0,0) hasta el lugar donde está el objeto.
+
+- La velocidad es otra flecha: Apunta en la dirección del movimiento y su longitud representa qué tan rápido se mueve el objeto.
+
+- ¿Qué significa “sumar la velocidad a la posición”?
+
+Geométricamente, significa: Que tomas el punto donde está el objeto, desde ese punto, avanzas en la dirección de la flecha de velocidad, la punta de esa flecha marca la nueva posición.
+
+En el ejemplo 1.7 cada objeto tiene dos vectores:
+
+- Un vector que representa dónde está el objeto.
+
+- Un vector que representa cómo se mueve (su velocidad).
+
+Actualización de posición: En cada paso del tiempo, se toma la posición actual y se “desplaza” agregándole la velocidad.
+Geométricamente esto significa mover el punto actual una cierta distancia en la dirección indicada por la flecha de velocidad.
+
+Dibujar el objeto: Después de moverlo, el objeto se dibuja en esa nueva posición, así ves que se desplaza en la pantalla.
+
+### Actividad 8
+
+
+
 ## Bitácora de aplicación 
 
 
 
 ## Bitácora de reflexión
+
 
 
