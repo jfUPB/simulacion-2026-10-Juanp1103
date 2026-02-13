@@ -267,6 +267,135 @@ https://github.com/user-attachments/assets/b37a5210-c1a1-46c2-807d-c64c76a98bbb
 
 ## Bitácora de reflexión
 
+### Actividad 10
 
+- Para esta actividad me gusto los ecosistemas que eran mas caoticos, lo que buscaba para esta obra era precisamente eso, lo logre creando 3 especies, cada una de las especies se veia atraida por una especie diferente pero esta especie diferente repelia esa especie, asi mismo cada especie se repelia levemente entre ellos para que no se volvieran cumulos de particulas
+
+Codigo:
+```
+let particles = [];
+let interactionRadius = 80;
+
+function setup() {
+  createCanvas(900, 700);
+  background(0);
+
+  // 🔴 Especie A (200)
+  for (let i = 0; i < 200; i++) {
+    particles.push(new Particle(random(width), random(height), "A"));
+  }
+
+  // 🔵 Especie B (250)
+  for (let i = 0; i < 250; i++) {
+    particles.push(new Particle(random(width), random(height), "B"));
+  }
+
+  // 🟢 Especie C (200)
+  for (let i = 0; i < 200; i++) {
+    particles.push(new Particle(random(width), random(height), "C"));
+  }
+}
+
+function draw() {
+  // Trails
+  fill(0, 25);
+  noStroke();
+  rect(0, 0, width, height);
+
+  for (let p of particles) {
+    p.applyInteractions(particles);
+    p.update();
+    p.display();
+  }
+}
+
+class Particle {
+  constructor(x, y, species) {
+    this.pos = createVector(x, y);
+    this.vel = p5.Vector.random2D();
+    this.acc = createVector(0, 0);
+    this.species = species;
+    this.size = 5;
+  }
+
+  applyForce(force) {
+    this.acc.add(force);
+  }
+
+  applyInteractions(others) {
+    for (let other of others) {
+      if (other === this) continue;
+
+      let dir = p5.Vector.sub(other.pos, this.pos);
+      let d = dir.mag();
+
+      if (d < interactionRadius && d > 5) {
+
+        let forceStrength = getInteraction(this.species, other.species);
+
+        if (forceStrength !== 0) {
+          dir.normalize();
+
+          // fuerza depende de distancia
+          let strength = forceStrength * (1 - d / interactionRadius);
+          dir.mult(strength);
+
+          this.applyForce(dir);
+        }
+      }
+    }
+  }
+
+  update() {
+    // Motion 101
+    this.vel.add(this.acc);
+    this.vel.limit(3);
+    this.pos.add(this.vel);
+
+    // Fricción leve
+    this.vel.mult(0.98);
+
+    this.acc.mult(0);
+
+    // Bordes envolventes
+    this.pos.x = (this.pos.x + width) % width;
+    this.pos.y = (this.pos.y + height) % height;
+  }
+
+  display() {
+    noStroke();
+
+    if (this.species === "A") fill(255, 80, 80, 180);
+    if (this.species === "B") fill(80, 150, 255, 180);
+    if (this.species === "C") fill(100, 255, 140, 180);
+
+    circle(this.pos.x, this.pos.y, this.size);
+  }
+}
+
+// MATRIZ ASIMÉTRICA
+function getInteraction(from, to) {
+
+  // 🔴 A
+  if (from === "A" && to === "A") return -0.1;
+  if (from === "A" && to === "B") return 0.6;     // fuerte atracción
+  if (from === "A" && to === "C") return -0.15;   // leve repulsión
+
+  // 🔵 B
+  if (from === "B" && to === "A") return -0.6;    // fuerte repulsión
+  if (from === "B" && to === "B") return 0.2;     // agrupamiento leve
+  if (from === "B" && to === "C") return 0;       // ignora
+
+  // 🟢 C
+  if (from === "C" && to === "A") return 0.3;    // leve atracción
+  if (from === "C" && to === "B") return -0.6;    // fuerte repulsión
+  if (from === "C" && to === "C") return -0.06;    // leve atracción
+
+  return 0;
+}
+```
+Link p5.js: https://editor.p5js.org/juanpa1103/sketches/wh3YKnOVc
+
+<img width="1785" height="1384" alt="image" src="https://github.com/user-attachments/assets/d4e755c9-578b-4c47-96a1-e8b41701aa46" />
 
 
