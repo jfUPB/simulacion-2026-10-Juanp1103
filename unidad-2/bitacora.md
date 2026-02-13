@@ -269,41 +269,39 @@ https://github.com/user-attachments/assets/b37a5210-c1a1-46c2-807d-c64c76a98bbb
 
 ### Actividad 10
 
-- Para esta actividad me gusto los ecosistemas que eran mas caoticos, lo que buscaba para esta obra era precisamente eso, lo logre creando 3 especies, cada una de las especies se veia atraida por una especie diferente pero esta especie diferente repelia esa especie, asi mismo cada especie se repelia levemente entre ellos para que no se volvieran cumulos de particulas
+- Para esta actividad me gusto los ecosistemas que eran mas caoticos, lo que buscaba para esta obra era precisamente eso, lo logre creando 3 especies, cada una de las especies se veia atraida por una especie diferente pero esta especie diferente repelia esa especie, asi mismo cada especie se repelia levemente entre ellos para que no se volvieran cumulos de particulas de una misma especie, con el mouse se hizo que en un radio las especies continuaran con sus comportamientos normales pero se veian atraidos unos en mas medida que otros haciendo que se vea como una especia de celula o algo similar, pero al presionar el boton del mouse cambian cuales se ven atraidos por el mouse y cuales repelidos, de esta forma se da una especie de orden al ecosistema pero manteniendo este concepto principal que era el caos entre las especies.
 
 Codigo:
 ```
 let particles = [];
 let interactionRadius = 80;
+let mouseRadius = 150;
 
 function setup() {
   createCanvas(900, 700);
   background(0);
 
-  // 🔴 Especie A (200)
   for (let i = 0; i < 200; i++) {
     particles.push(new Particle(random(width), random(height), "A"));
   }
 
-  // 🔵 Especie B (250)
   for (let i = 0; i < 250; i++) {
     particles.push(new Particle(random(width), random(height), "B"));
   }
 
-  // 🟢 Especie C (200)
   for (let i = 0; i < 200; i++) {
     particles.push(new Particle(random(width), random(height), "C"));
   }
 }
 
 function draw() {
-  // Trails
   fill(0, 25);
   noStroke();
   rect(0, 0, width, height);
 
   for (let p of particles) {
     p.applyInteractions(particles);
+    p.applyMouseInteraction();
     p.update();
     p.display();
   }
@@ -330,34 +328,49 @@ class Particle {
       let d = dir.mag();
 
       if (d < interactionRadius && d > 5) {
-
         let forceStrength = getInteraction(this.species, other.species);
 
         if (forceStrength !== 0) {
           dir.normalize();
-
-          // fuerza depende de distancia
           let strength = forceStrength * (1 - d / interactionRadius);
           dir.mult(strength);
-
           this.applyForce(dir);
         }
       }
     }
   }
 
+  applyMouseInteraction() {
+    let mouse = createVector(mouseX, mouseY);
+    let dir = p5.Vector.sub(mouse, this.pos);
+    let d = dir.mag();
+
+    if (d < mouseRadius) {
+      dir.normalize();
+
+      let strength = 2;
+
+      if (!mouseIsPressed) {
+        strength = 1; // atracción leve universal
+      } else {
+        if (this.species === "A") strength = 0.6;
+        if (this.species === "B") strength = -0.6;
+        if (this.species === "C") strength = 0;
+      }
+
+      dir.mult(strength * (5 - d / mouseRadius));
+      this.applyForce(dir);
+    }
+  }
+
   update() {
-    // Motion 101
     this.vel.add(this.acc);
     this.vel.limit(3);
     this.pos.add(this.vel);
 
-    // Fricción leve
-    this.vel.mult(0.98);
-
+    this.vel.mult(0.98); // fricción leve
     this.acc.mult(0);
 
-    // Bordes envolventes
     this.pos.x = (this.pos.x + width) % width;
     this.pos.y = (this.pos.y + height) % height;
   }
@@ -373,29 +386,28 @@ class Particle {
   }
 }
 
-// MATRIZ ASIMÉTRICA
 function getInteraction(from, to) {
 
-  // 🔴 A
   if (from === "A" && to === "A") return -0.1;
-  if (from === "A" && to === "B") return 0.6;     // fuerte atracción
-  if (from === "A" && to === "C") return -0.15;   // leve repulsión
+  if (from === "A" && to === "B") return 0.28;
+  if (from === "A" && to === "C") return -0.12;
 
-  // 🔵 B
-  if (from === "B" && to === "A") return -0.6;    // fuerte repulsión
-  if (from === "B" && to === "B") return 0.2;     // agrupamiento leve
-  if (from === "B" && to === "C") return 0;       // ignora
+  if (from === "B" && to === "A") return -0.5;
+  if (from === "B" && to === "B") return -0.2;
+  if (from === "B" && to === "C") return -0.2;
 
-  // 🟢 C
-  if (from === "C" && to === "A") return 0.3;    // leve atracción
-  if (from === "C" && to === "B") return -0.6;    // fuerte repulsión
-  if (from === "C" && to === "C") return -0.06;    // leve atracción
+  if (from === "C" && to === "A") return 0.15;
+  if (from === "C" && to === "B") return 0.3;
+  if (from === "C" && to === "C") return -0.05;
 
   return 0;
 }
 ```
 Link p5.js: https://editor.p5js.org/juanpa1103/sketches/wh3YKnOVc
 
-<img width="1785" height="1384" alt="image" src="https://github.com/user-attachments/assets/d4e755c9-578b-4c47-96a1-e8b41701aa46" />
+<img width="1761" height="1364" alt="image" src="https://github.com/user-attachments/assets/9eb30983-0efd-4077-b056-58df4abd5e27" />
 
+<img width="1726" height="1363" alt="image" src="https://github.com/user-attachments/assets/099c04ee-f5c9-45a7-b0d5-b1b2037f7f22" />
+
+<img width="1758" height="1361" alt="image" src="https://github.com/user-attachments/assets/e3c71a04-f470-4ffd-9744-f539351d8f52" />
 
