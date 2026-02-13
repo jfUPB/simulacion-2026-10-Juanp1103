@@ -170,13 +170,103 @@ Dibujar el objeto: Después de moverlo, el objeto se dibuja en esa nueva posici�
 
 ### Actividad 8
 
+- En el caso de la aceleracion constante se el movimento es mas predecible y constante, a medida que pasa el tiempo la velocidad aumenta constantemente.
+- En el caso de la aceleracion aleatoria nos da un movimento muy erratico sin sentido aparente, haciendo que el movimento no se pueda predecir, similar a un random walk
+- En el caso de la aceleracion con el mouse el movimento no solo es predecible sino que tambien es manipulable, dependiendo de la distancia en la que me encuentre la aceleracion cambia de forma diferente
 
+Se puede observar que la aceleracion es una variable importante que nos sirve para variar el comportamiento sin mucho problema.
 
 ## Bitácora de aplicación 
 
+### Actividad 9
+
+- Mi obra la desarrolle pensando en la fluidez, por eso decidi utilizar una aceleracion constante, de esta forma la obra se siente un poco mas natural pero impredecible como un fluido, esta imprediccion la hice utilizando el concepto de ruido perlin de la unidad anterior, al ver la obra siento que logre darle ese sentimiento como si fuera agua o un fluido similar. adicional para las normas interactivas utilizo el mouse para que la posicion me cambie los angulos de como se mueven las particulas, y cuando presiono hago que las particulas se repelen, del mismo modo con el boton shift las particulas son atraidas.
+
+Codigo:
+```
+let particles = [];
+let zoff = 0;
+
+function setup() {
+  createCanvas(740, 640);
+  background(0);
+
+  for (let i = 0; i < 5000; i++) {
+    particles.push({
+      pos: createVector(random(width), random(height)),
+      vel: createVector(0, 0),
+      acc: createVector(0, 0)
+    });
+  }
+}
+
+function draw() {
+
+  fill(0,10);
+  rect(0, 0, width, height);
+
+ let noiseScale = map(mouseY, 0, height, 0.002, 0.02);
+  let fieldStrength = map(mouseX, 0, width, 0.5, 3);
+
+  for (let p of particles) {
+
+    // ---------- FLOW FIELD ----------
+    let n = noise(p.pos.x * noiseScale, p.pos.y * noiseScale, zoff);
+    let angle = n * TWO_PI * fieldStrength;
+
+    let flowForce = p5.Vector.fromAngle(angle);
+    flowForce.setMag(0.1);
+    p.acc.add(flowForce);
+
+    let mouse = createVector(mouseX, mouseY);
+    let dir = p5.Vector.sub(mouse, p.pos);
+    let d = dir.mag();
+
+    // ---------- REPULSIÓN (mouse click) ----------
+    if (mouseIsPressed && d < 150) {
+      dir.normalize();
+      dir.mult(-0.5);
+      p.acc.add(dir);
+    }
+
+    // ---------- ATRACCIÓN (SHIFT) ----------
+    if (keyIsDown(SHIFT)) {
+      dir.normalize();
+      dir.mult(0.3);
+      p.acc.add(dir);
+    }
+
+
+    // ---------- MOTION 101 ----------
+    p.vel.add(p.acc);
+    p.vel.limit(3);
+    p.pos.add(p.vel);
+    p.acc.mult(0);
+
+    // ---------- BORDES ----------
+    p.pos.x = (p.pos.x + width) % width;
+    p.pos.y = (p.pos.y + height) % height;
+
+    // ---------- COLOR DEPENDIENTE DE VELOCIDAD ----------
+    let Actspeed = p.vel.mag();
+    let hueValue = map(Actspeed, 0, 3, 70, 150);
+
+    stroke(hueValue, 100, 255 - hueValue, 140);
+    point(p.pos.x, p.pos.y);
+  }
+
+  zoff += 0.005;
+
+}
+```
+Enlace a p5.js: https://editor.p5js.org/juanpa1103/sketches/4otoYv1VK
+
+
+https://github.com/user-attachments/assets/b37a5210-c1a1-46c2-807d-c64c76a98bbb
 
 
 ## Bitácora de reflexión
+
 
 
 
