@@ -2,7 +2,7 @@
 
 ## Bitácora de proceso de aprendizaje
 ### Actividad 1
-
+Me parecio impresionante como con el pasar del tiempo nos mostraba el avance que estaba teniendo con la ia, viendolo de un punto de vista mas artistico me parece impactante y por un lado un poco triste de pensar que la creatividad se la estamos dejando caada vez mas a una inteligencia artificial, pero al mismo tiempo asombrado por lo que se podria llegar a generar, siento que las obras generadas por ia pueden ser impactantes pero al mismo tiempo no me gustaaria comenzar a ver "obras" donde la intervencion humana es minima, siento que se perderia el alma de la obra, ya no esta interviniendo la imaginacion de un humano mas alla de simplemente escribir un prompt, entiendo que puede ser dificil conseguir ciertos resultados, y no quiero decir que lo que algunos artistas hacen con ia valgan menos pero a fin de cuentas le dejas todo el trabajo de creacion a una maquina que no entiende como vemos realmente el mundo.
 
 ### Actividad 2
 Lo que pude aprender en esta actividad y lo que cambia de la unidad anterior es que en esta unidad ya se hace un calculo de fuerzas que estan actuando o que yo le estoy agregando y de esta forma calculamos la aceleracion, en la unidad anterior lo que haciamos era darle un valor definido por mi, sin ningun tipo de calculo.
@@ -273,8 +273,215 @@ Link p5.js: https://editor.p5js.org/juanpa1103/sketches/Vk3dJ-0HN
 
 ## Bitácora de aplicación 
 ### Actividad 4
+Explicacion:
+La idea que tenia detras de esta obra era poder ver un poco de la basura espacial presente alrededor de la tierra, en este caso no es una obra que busque como concientizar sobre este problema sino mas una forma de visualizar en una muy pequeña escala el como se puede ver y sentir como esta interaccion, a diferencia de como se podria comportar en la realidad aca podemos modificar variables que nos crean un caos mayor.
+
+Historia: En una tierra donde los humanos ya se extinguieron dejaron rastros visibles, entre estos rastros queda la basura espacial, haciendo casi imposible que otra civilizacion obvie el claro avance tecnologico que una vez tuvo la raza humana, ahora ese caos constante mantiene las diferentes razas que quieren llegar a la tierraalejadas, por lo menos hasta que estas caigan a la superficie.
+
+Codigo:
+```
+let bodies = [];
+let G = 0.6;
+let galaxyRadius;
+let gravityDirection = 1;
+
+let centralStar;
+
+function setup() {
+  createCanvas(900, 900);
+  galaxyRadius = width * 0.42;
+  resetSystem();
+}
+
+function resetSystem() {
+  bodies = [];
+
+  centralStar = new Body(0, 0, 2000, true);
+  bodies.push(centralStar);
+
+  for (let i = 0; i < 45; i++) {
+    let angle = random(TWO_PI);
+    let r = random(120, galaxyRadius - 40);
+
+    let x = cos(angle) * r;
+    let y = sin(angle) * r;
+
+    let m = random(14, 40);
+    let planet = new Body(x, y, m);
+
+    // velocidad orbital estable
+    let orbitalSpeed = sqrt((G * centralStar.mass) / r);
+    let tangent = createVector(-sin(angle), cos(angle));
+    tangent.setMag(orbitalSpeed);
+
+    planet.vel = tangent;
+
+    bodies.push(planet);
+  }
+}
+
+function draw() {
+  background(5, 5, 20);
+  translate(width / 2, height / 2);
+
+  drawBoundary();
+
+  let frictionStrength = map(mouseX, 0, width, 0.0001, 0.01);
+
+  for (let body of bodies) {
+
+    if (!body.isStar) {
+
+      // SOLO gravedad del sol
+      let force = gravitationalForce(body, centralStar);
+      body.applyForce(force);
+
+      // fricción muy leve
+      let friction = body.vel.copy();
+      friction.mult(-1);
+      friction.setMag(frictionStrength);
+      body.applyForce(friction);
+
+      body.update();
+      contain(body);
+    }
+
+    body.display();
+  }
+}
+
+function gravitationalForce(a, b) {
+  let dir = p5.Vector.sub(b.pos, a.pos);
+  let d = constrain(dir.mag(), 40, 600);
+
+  let strength = (G * a.mass * b.mass) / (d * d);
+  dir.setMag(strength * gravityDirection);
+
+  return dir;
+}
+
+function contain(body) {
+  let d = body.pos.mag();
+
+  if (d > galaxyRadius) {
+    let inward = body.pos.copy().mult(-1).setMag(0.5);
+    body.applyForce(inward);
+  }
+}
+
+function drawBoundary() {
+  noFill();
+  stroke(100, 120, 255, 40);
+  circle(0, 0, galaxyRadius * 2);
+}
+
+function mousePressed() {
+  gravityDirection *= -1;
+}
+
+function keyPressed() {
+  if (key === 'r' || key === 'R') resetSystem();
+}
+
+class Body {
+  constructor(x, y, m, isStar = false) {
+    this.pos = createVector(x, y);
+    this.vel = createVector();
+    this.acc = createVector();
+    this.mass = m;
+    this.isStar = isStar;
+
+    this.radius = sqrt(this.mass) * 1.4;
+    this.baseColor = color(
+      random(120, 255),
+      random(120, 255),
+      random(120, 255)
+    );
+  }
+
+  applyForce(force) {
+    let f = p5.Vector.div(force, this.mass);
+    this.acc.add(f);
+  }
+
+  update() {
+    this.vel.add(this.acc);
+    this.pos.add(this.vel);
+    this.acc.mult(0);
+  }
+
+  display() {
+    noStroke();
+
+if (this.isStar) {
+
+  push();
+  translate(this.pos.x, this.pos.y);
+  noStroke();
+
+  //  Atmósfera exterior
+  for (let r = this.radius * 1.8; r > this.radius; r -= 3) {
+    let alpha = map(r, this.radius, this.radius * 1.8, 120, 0);
+    fill(100, 180, 255, alpha);
+    circle(0, 0, r * 2);
+  }
+
+  //  Océano base con degradado
+  for (let r = this.radius; r > 0; r -= 2) {
+    let inter = map(r, 0, this.radius, 0, 1);
+    let oceanColor = lerpColor(
+      color(20, 60, 160),
+      color(0, 20, 80),
+      inter
+    );
+    fill(oceanColor);
+    circle(0, 0, r * 2);
+  }
+
+  //  Continentes orgánicos usando ruido
+  fill(40, 160, 70, 220);
+  beginShape();
+  let t = millis() * 0.0003;
+  for (let a = 0; a < TWO_PI; a += 0.2) {
+    let noiseFactor = noise(cos(a) + 1, sin(a) + 1, t);
+    let r = this.radius * 0.75 * noiseFactor;
+    vertex(cos(a) * r, sin(a) * r);
+  }
+  endShape(CLOSE);
+
+  //  Nubes suaves
+  fill(255, 40);
+  ellipse(-this.radius * 0.3, -this.radius * 0.2,
+          this.radius * 0.9, this.radius * 0.5);
+  ellipse(this.radius * 0.2, this.radius * 0.3,
+          this.radius * 0.7, this.radius * 0.4);
+
+  pop();
+} else {
+      push();
+      translate(this.pos.x, this.pos.y);
+
+      for (let r = this.radius; r > 0; r -= 2) {
+        let inter = map(r, 0, this.radius, 0, 1);
+        let c = lerpColor(this.baseColor, color(0), inter);
+        fill(c);
+        circle(0, 0, r * 2);
+      }
+
+      fill(255, 40);
+      ellipse(-this.radius * 0.3, -this.radius * 0.3,
+              this.radius * 0.6, this.radius * 0.4);
+
+      pop();
+    }
+  }
+}
+```
+Link p5.js: [https://editor.p5js.org/juanpa1103/sketches/TH2qd6nfA](https://editor.p5js.org/juanpa1103/sketches/4CzwdgMjV)
+![Unidad3_Act4Arte2](https://github.com/user-attachments/assets/fa7f85f0-0baa-4ef7-8482-186f929504d3)
 
 
 ## Bitácora de reflexión
 ### Actividad 5
+
 
