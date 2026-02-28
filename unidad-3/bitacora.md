@@ -483,5 +483,98 @@ Link p5.js: [https://editor.p5js.org/juanpa1103/sketches/TH2qd6nfA](https://edit
 
 ## Bitácora de reflexión
 ### Actividad 5
+1. En el marco de motion 101 nos sirve o mas bien nos explica a como simular el movimiento y las fisicas que lo compone, en este fundamento nos muestra como podemos usar los vectores, donde la posición de un objeto no se modifica directamente, sino que emerge como consecuencia de una cadena de relaciones físicas: las fuerzas aplicadas generan aceleración, la aceleración modifica la velocidad, y la velocidad actualiza la posición.
 
+2. La obra que quiero tomar como referente de las que aparecen en el video es la siguiente:
+<img width="1447" height="1299" alt="image" src="https://github.com/user-attachments/assets/f5fa0c79-5551-4dde-8c63-5ebe1c6b69c9" />
+
+Tomo esta ya que me parece muy interesante como el movimiento de una orbita afecta a la orbita que esta en uno de los extremos de la bara y el efecto que se desencadena.
+
+Codigo:
+```
+let root;
+let wind;
+
+function setup() {
+  createCanvas(900, 700);
+  root = new Orbiter(width / 2, height / 2, 120, 5);
+}
+
+function draw() {
+  background(130);
+
+  wind = map(mouseX, 0, width, -0.003, 0.003);
+
+  root.applyWind(wind);
+  root.update();
+  root.display();
+}
+
+
+class Orbiter {
+  constructor(x, y, radius, depth) {
+    this.origin = createVector(x, y);
+    this.radius = radius;
+
+    this.angle = random(TWO_PI);
+    this.aVelocity = random(-0.009, 0.001);
+    this.aAcceleration = 0;
+
+    this.mass = random(1, 3);
+    this.child = null;
+
+    if (depth > 0) {
+      this.child = new Orbiter(0, 0, radius * 0.8, depth - 1);
+    }
+  }
+
+  applyWind(force) {
+    this.aAcceleration += force / this.mass;
+
+    if (this.child) {
+      this.child.applyWind(force * 1.4);
+    }
+  }
+
+  update() {
+    // gravedad angular suave
+    this.aAcceleration += -sin(this.angle) * 0.00005;
+
+    this.aVelocity += this.aAcceleration;
+    this.aVelocity *= 0.95; // fricción leve
+    this.angle += this.aVelocity;
+
+    this.aAcceleration = 0;
+
+    if (this.child) {
+      this.child.update();
+    }
+  }
+
+  display() {
+    push();
+    translate(this.origin.x, this.origin.y);
+
+    let x = cos(this.angle) * this.radius;
+    let y = sin(this.angle) * this.radius;
+
+    stroke(0);
+    line(0, 0, x, y);
+
+    fill(40, 90, 180);
+    noStroke();
+    circle(x, y, 15);
+
+    if (this.child) {
+      this.child.origin = createVector(x, y);
+      this.child.display();
+    }
+
+    pop();
+  }
+}
+```
+![Unidad3_Act5](https://github.com/user-attachments/assets/8c627057-11d4-4996-b149-9d92fea9d0a5)
+
+Link p5.js: https://editor.p5js.org/juanpa1103/sketches/JH_QjCHbW
 
