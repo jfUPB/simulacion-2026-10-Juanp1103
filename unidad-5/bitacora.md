@@ -249,6 +249,205 @@ No cambió: `return this.lifespan < 0.0;`, todas las partículas mueren igual.
 
 ### Actividad 5
 
+1. Represento el ciclo de vida de una idea: nace como una entidad clara, se mueve buscando atención, y al perderla se fragmenta en pensamientos dispersos que finalmente desaparecen. La pieza busca transmitir cómo las ideas necesitan interacción para mantenerse vivas. Muchas veces tenemos buenas ideas, solo necesitamos un poco de concentracion para que estas ideas perduren en algo mejor aunque al final tambien terminemos olvidando estas ideas.
+
+3. Mapa de decisiones:
+
+- IdeaParticle (círculo) queria representar la claridad y unidad.
+- FragmentParticle (líneas) Este queria que representara confusión, pérdida o desorientacion.
+- Atracción al mouse busca simbolizar la atención humana.
+- Transformación al morir, queria mostrar que una idea nunca desaparece completamente, se fragmenta.
+- Gravedad la veía como un olvido inevitable, representando algo asi como un avismo.
+
+3. Bocetos de idea:
+<img width="720" height="1280" alt="boceto 1" src="https://github.com/user-attachments/assets/2faf59d9-5b1e-4932-8f23-5cc6c69e8789" />
+
+
+4. Codigo:
+
+```
+let emitter;
+
+function setup() {
+  createCanvas(900, 600);
+  emitter = new Emitter(width / 2, height / 4);
+}
+
+function draw() {
+  background(10, 20);
+
+  let gravity = createVector(0, 0.03);
+
+  emitter.applyGravity(gravity);
+  emitter.applyAttraction(mouseX, mouseY);
+
+  if (frameCount % 10 === 0) {
+    emitter.addIdea();
+  }
+
+  emitter.run();
+
+  drawAttentionAura();
+}
+
+// ---------------- MOUSE CONCENTRACION ----------------
+function drawAttentionAura() {
+  noStroke();
+
+  for (let r = 70; r > 0; r -= 10) {
+    fill(255, 255, 255, map(r, 0, 120, 60, 0));
+    circle(mouseX, mouseY, r * 2);
+  }
+}
+
+// ---------------- PARTICLE BASE ----------------
+class Particle {
+  constructor(x, y) {
+    this.position = createVector(x, y);
+    this.velocity = p5.Vector.random2D().mult(random(0.5, 2));
+    this.acceleration = createVector(0, 0);
+    this.lifespan = 255;
+  }
+
+  applyForce(f) {
+    this.acceleration.add(f);
+  }
+
+  update() {
+    this.velocity.add(this.acceleration);
+    this.position.add(this.velocity);
+    this.acceleration.mult(0);
+    this.lifespan -= 2;
+  }
+
+  isDead() {
+    return this.lifespan < 0;
+  }
+}
+
+// ---------------- PARTICULA IDEA ----------------
+class IdeaParticle extends Particle {
+  constructor(x, y) {
+    super(x, y);
+  }
+
+  run() {
+    this.update();
+    this.show();
+  }
+
+  show() {
+    let d = dist(this.position.x, this.position.y, mouseX, mouseY);
+    let radius = 120;
+
+    let size = map(this.lifespan, 255, 0, 14, 4);
+
+    if (d < radius) {
+      fill(180, 255, 255, this.lifespan);
+      size *= 1.8;
+    } else {
+      fill(100, 200, 255, this.lifespan);
+    }
+
+    noStroke();
+    circle(this.position.x, this.position.y, size);
+  }
+}
+
+// ---------------- FRAGMENTOS DE OLVIDO ----------------
+class FragmentParticle extends Particle {
+  constructor(x, y) {
+    super(x, y);
+    this.velocity.mult(random(2, 4));
+  }
+
+  run() {
+    this.update();
+    this.show();
+  }
+
+  show() {
+    stroke(255, this.lifespan);
+    line(
+      this.position.x,
+      this.position.y,
+      this.position.x + random(-6, 6),
+      this.position.y + random(-6, 6)
+    );
+  }
+}
+
+// ---------------- EMITTER ----------------
+class Emitter {
+  constructor(x, y) {
+    this.origin = createVector(x, y);
+    this.particles = [];
+  }
+
+  addIdea() {
+    this.particles.push(new IdeaParticle(this.origin.x, this.origin.y));
+  }
+
+  applyGravity(force) {
+    for (let p of this.particles) {
+      p.applyForce(force);
+    }
+  }
+
+  applyAttraction(mx, my) {
+    let target = createVector(mx, my);
+
+    for (let p of this.particles) {
+      if (p instanceof IdeaParticle) {
+        let dir = p5.Vector.sub(target, p.position);
+        let d = dir.mag();
+
+        let radius = 120;
+
+        if (d < radius) {
+          dir.setMag(0.8);
+          p.applyForce(dir);
+
+          p.lifespan += 1.5;
+        } else {
+          p.lifespan -= 1;
+        }
+      }
+    }
+  }
+
+  run() {
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      let p = this.particles[i];
+      p.run();
+
+      if (p.isDead()) {
+
+        if (p instanceof IdeaParticle) {
+          for (let j = 0; j < 6; j++) {
+            this.particles.push(
+              new FragmentParticle(p.position.x, p.position.y)
+            );
+          }
+        }
+
+        this.particles.splice(i, 1);
+      }
+    }
+  }
+}
+```
+Enlace p5.js: https://editor.p5js.org/juanpa1103/sketches/UYM_0duUU
+
+5.Capturas:
+- Nacimiento de las ideas:
+<img width="1667" height="1047" alt="image" src="https://github.com/user-attachments/assets/d7ca538d-ccb5-46b1-acee-6e6a7b8142ac" />
+
+- ideas siendo olvidadadas:
+<img width="1558" height="886" alt="image" src="https://github.com/user-attachments/assets/6127a6aa-8669-4816-aef6-6fc3a57b4dcd" />
+
+- Concentracion en las ideas:
+<img width="1563" height="971" alt="image" src="https://github.com/user-attachments/assets/d80df3ad-ffc1-476b-9ff4-535dd10621b3" />
 
 ## Bitácora de reflexión
 
