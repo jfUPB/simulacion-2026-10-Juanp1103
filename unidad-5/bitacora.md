@@ -452,3 +452,46 @@ Enlace p5.js: https://editor.p5js.org/juanpa1103/sketches/UYM_0duUU
 ## Bitácora de reflexión
 
 ### Actividad 6
+
+Parte 1 — Principios fundamentales
+
+Describe con tus propias palabras cada uno de estos 10 principios:
+
+1. Una partícula es una entidad con estado.
+Una partícula no es solo un punto en pantalla; es un “objeto” con información propia: posición, velocidad, edad, color, tamaño, etc.
+
+2. Una partícula tiene ciclo de vida.
+Las partículas nacen, evolucionan y mueren.
+
+3. Un sistema de partículas gestiona colecciones dinámicas de elementos.
+No trabajas con una sola partícula, sino con muchas, el sistema se encarga de actualizarlas, dibujarlas y mantenerlas organizadas.
+
+4. La creación y eliminación de partículas no es un detalle técnico menor, sino parte central del modelo.
+No es solo un detalle técnico: define el comportamiento del sistema, cuándo nacen, cuántas nacen, y cuándo mueren afecta directamente el resultado visual.
+
+5. Debe haber separación entre la lógica de una partícula individual y la lógica del sistema/emisor.
+Cada partícula tiene su comportamiento (moverse, envejecer), pero el sistema define reglas globales.
+
+6. Un emisor o particle system es una abstracción importante.
+El emisor es quien “genera” partículas, Define cosas como: Posición de origen, Ritmo de emisión, Dirección inicial.
+
+7. Pueden existir sistemas de sistemas.
+Puedes tener múltiples sistemas interactuando o anidados osea un sistema principal que genera sub-sistemas.
+
+8. Puede haber heterogeneidad usando herencia y polimorfismo.
+No todas las partículas tienen que ser iguales, puedes tener distintos tipos con comportamientos diferentes.
+
+9. Las partículas pueden responder a fuerzas globales y locales.
+Las partículas pueden reaccionar a:
+
+- Fuerzas globales: gravedad, viento
+- Fuerzas locales: atracción a un punto, ruido, colisiones
+
+10. La representación visual puede variar sin cambiar el principio algorítmico de fondo.
+El sistema define el comportamiento, no la apariencia. Puedes cambiar cómo se ven sin cambiar cómo funcionan.
+
+Parte 2 — Transferencia a otra herramienta
+
+Piensa en tu pieza del Apply: si la quisieras recrear en Unity (o TouchDesigner, o Blender), ¿Qué se mantendría igual y qué cambiaría? ¿Qué partes de tu diseño son independientes de la herramienta?
+
+Lo que se mantendira igual seria basicamente la logica del sistema de particulas, lo que tendria que cambiar es la logica en la que se mueren las particulas, ya que por ejemplo en unity no puedes colocar una condicion que cree las particulas cuando las ideas mueren sino que tocaria hacer que cada particula sea un subemitter que crea las otras particulas. las partes que son independientes de la herramienta creo que seria la logica de la programacion de las particulas. 
