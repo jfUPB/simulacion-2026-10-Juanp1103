@@ -285,10 +285,61 @@ la intensidad → más cohesión o más dispersión.
 
 ### Actividad 5
 
+- El flow field produce un movimiento continuo y dirigido, como si todos los agentes estuvieran siendo guiados por una fuerza invisible externa. Los recorridos suelen ser suaves, con trayectorias largas y coherentes, lo que genera patrones tipo corrientes, viento o fluidos. En cambio, el flocking produce un movimiento colectivo y relacional, no hay una dirección global impuesta, sino que el comportamiento emerge de cómo los agentes se afectan entre sí, generando agrupaciones, separaciones y reorganizaciones constantes.
 
+- En términos de control visual, el flow field ofrece un control más directo: puedes diseñar el campo con ruido, funciones o direcciones y eso define bastante claramente el resultado. Es más predecible. El flocking, en cambio, es menos controlable visualmente porque depende de interacciones locales; pequeños cambios en parámetros pueden producir resultados muy distintos, lo que lo hace más difícil de dirigir con precisión.
+
+- Sobre el nivel de emergencia, el flocking es más alto. El comportamiento global no está definido explícitamente, sino que aparece a partir de reglas simples. En el flow field también hay emergencia, pero está más “guiada” por la estructura del campo, así que es menos impredecible.
+
+- En cuanto a la atmósfera, el flow field suele sentirse más natural, fluido y ambiental, como fenómenos físicos continuos. El flocking, en cambio, se siente más vivo, dinámico y orgánico, como si hubiera una inteligencia colectiva o un sistema social en acción.
+
+- Pensando en su relación con música, el flow field funciona muy bien con sonidos continuos o envolventes como ambient o drones, porque su movimiento acompaña esa sensación de flujo constante. El flocking encaja mejor con música rítmica o con cambios de energía, ya que el grupo puede comprimirse, expandirse o reorganizarse en respuesta a esos cambios.
+
+- Finalmente, en términos de ventajas y limitaciones:
+
+  - El flow field es más fácil de controlar y diseñar visualmente, pero puede volverse repetitivo si el campo no cambia mucho.
+  - El flocking es más expresivo y rico en comportamiento emergente, pero más difícil de controlar y ajustar con precisión.
+
+Contemplativa: usaría flow fields, porque permiten movimientos suaves, continuos y envolventes que acompañan la calma sin generar distracción.
+Agresiva: usaría flocking, especialmente aumentando separación y velocidad, para generar movimientos tensos, caóticos y con sensación de choque o conflicto.
+Melancólica: probablemente flow fields, pero con baja velocidad y cambios suaves, porque pueden transmitir deriva, vacío o flujo lento.
+Eufórica: usaría flocking, porque permite crear explosiones de movimiento colectivo, expansión del grupo y sensación de energía compartida.
 
 ## Bitácora de aplicación 
 
 ### Actividad 6
+
+1. Concepto visual: La pieza propone la construcción de una red orgánica viva inspirada en el comportamiento del Physarum polycephalum. La idea es plasmar esta red de conexiones que tambien podemos ver en los nidos de hormigas, aprovechando la velocidad e intensidad de la cancion a medida que avanza para marcar mas el avance de los agentes.
+
+2. Relacion con el tema musical: la idea es que los agentes guarden cierta memoria para que se muevan por la misma direccion marcando cada vez los trayectos recorridos, en los momentos mas intensos de la cancion la idea es que los agentes recorran estos caminos mas rapidamente. esto reforzaria la idea que se intenta transmitir con la cancion de que vivimos en una maquina donde el imperio se puede entender como la sociedad moderna y las hormigas es como nosotros nos podemos sentir, muchas veces pequeños y constantemente trabajando, moviendonos por este gran "imperio".
+
+3. MoodBoard:
+<img width="1920" height="1080" alt="Diseño sin título" src="https://github.com/user-attachments/assets/de9ac56c-5a11-41fa-9027-4438cf3bea71" />
+
+4. Bocetos:
+<img width="1080" height="1920" alt="New Project" src="https://github.com/user-attachments/assets/49c694b8-995c-474e-a1f5-8488f18d66dc" />
+No dibujo bien, pero la idea es que de un punto central se comience a expandir en busca de unos puntos, una vez encontrados los puntos reforzar ese camino que conecta el centro con la "comida" o punto de llegada.
+
+5.Mapa de decisiones:
+el uso de agentes se va a tomar como representacion de estas hormigas en el espacio.
+el uso de trail no creara una memoria de los caminos recorridos creando de esta forma caminos mas optimos para estos puntos finales.
+el flow field nos creara este movimiento global que se busca para generar la red.
+
+6. Mapa de interpretación
+
+Pads generan movimiento lento y nos controlan la exploracion exploración
+Entrada de capas aumenta los agentes
+El beat refuerza conexiones
+dependiendo de la intensidad cambia la densidad de la red
+
+7. Justificacion de algoritmo elegido:
+
+Se escogio el flowfield ya que al querer simular una entidad viva se quiere que los movimientos sean mas fluidos que nos genera el flow field, el flocking en cambio al hacer movimientos mas como en manada no crearia esa sensacion de que el sistema vive, el flow field se combinara con un ruido para de esta forma generar espacios entre los caminos y que no siempre el camino sea recto sino que genere este efecto como de red tipo physarum
+
+8. La relacion que queria crear entre el audio y lo visual es mas que todo en terminos del concepto que gorillaz habla en la cancion haciendo esta relacion de los humanos y las hormigas, por lo que queria recrear una especie de hormiguero donde hay muchos caminos dentro del espacio.
+
+9. La IA en este caso se estaba utilizando para la realizacion del codigo, el concepto y la seleccion de la cancion fueron ideas propias, la IA en cuanto al concepto me ayudo a identificar que elementos de la obra podrian ser modificados con la cancion, la idea de utilizar esta visual tipo physarum sale de un experimento realizado en japon donde este hongo recrea casi a la perfeccion optimizando vias de la red ferroviaria de tokyo, lo que me llevo a relacionarlo como los humanos creamos redes tan complejas pero a una escala mucho mayor, asemejandonos de esta por lo menos como logre percibirlo a las propias hormigas.
+
+11. Enlace al sketch con lo que se pudo lograr, no se completo la idea por completo: https://editor.p5js.org/juanpa1103/sketches/3ZasYtaJG 
 
 ## Bitácora de reflexión
