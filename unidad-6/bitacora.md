@@ -340,6 +340,13 @@ Se escogio el flowfield ya que al querer simular una entidad viva se quiere que 
 
 9. La IA en este caso se estaba utilizando para la realizacion del codigo, el concepto y la seleccion de la cancion fueron ideas propias, la IA en cuanto al concepto me ayudo a identificar que elementos de la obra podrian ser modificados con la cancion, la idea de utilizar esta visual tipo physarum sale de un experimento realizado en japon donde este hongo recrea casi a la perfeccion optimizando vias de la red ferroviaria de tokyo, lo que me llevo a relacionarlo como los humanos creamos redes tan complejas pero a una escala mucho mayor, asemejandonos de esta por lo menos como logre percibirlo a las propias hormigas.
 
-11. Enlace al sketch con lo que se pudo lograr, no se completo la idea por completo: https://editor.p5js.org/juanpa1103/sketches/3ZasYtaJG 
+11. Enlace al sketch : [https://editor.p5js.org/juanpa1103/sketches/3ZasYtaJG ](https://editor.p5js.org/juanpa1103/sketches/IyKRgVMso)
+
+12. Capturas:
+<img width="3749" height="2084" alt="image" src="https://github.com/user-attachments/assets/b0d74c3f-f5d3-4028-8334-74513b69d2d7" />
+
+<img width="3778" height="2082" alt="image" src="https://github.com/user-attachments/assets/e21a9f6d-05fb-453b-bdc0-ccae80dd3fa1" />
+
+
 
 ## Bitácora de reflexión
