@@ -323,8 +323,185 @@ El audio se procesa en dos modos simultáneos:
 Decisiones que siguieron siendo mías: la elección de la palabra, la estructura conceptual (calma, golpe, caos, recomposición), la decisión de usar gravedad cero porque un estruendo es onda y no caída, la observación de los problemas del prototipo (dispersión débil, retorno rotado, comportamiento extraño con ruido sostenido), y el diseño de la interpretación performativa.
 La IA aceleró la materialización; las decisiones de qué hacer y por qué fueron mías.
 
+10. Codigo fuente:
+``` js
+let Engine = Matter.Engine,
+    World = Matter.World,
+    Bodies = Matter.Bodies,
+    Body = Matter.Body,
+    Constraint = Matter.Constraint,
+    Mouse = Matter.Mouse,
+    MouseConstraint = Matter.MouseConstraint;
 
+let engine, world;
+let letras = [];
+let resortes = [];
+let mConstraint;
 
+let mic;
+let nivel = 0;
+let umbral = 0.12;
+let estabaSilencio = true;
+
+let palabra = "ESTRUENDO";
+let tamLetra;
+let espacio;
+
+let audioListo = false;
+
+function setup() {
+  let canvas = createCanvas(windowWidth, windowHeight);
+  
+  // Físicas
+  engine = Engine.create();
+  world = engine.world;
+  engine.gravity.y = 0;
+  
+  // Audio (se inicia con el primer click)
+  mic = new p5.AudioIn();
+  
+  // Tipografía: letras más pequeñas para que tengan espacio para dispersarse
+  tamLetra = min(width, height) * 0.07;
+  espacio = tamLetra * 1.1;
+  
+  // Fuente
+  textFont("Bebas Neue");
+  
+  crearPalabra();
+  
+  // Mouse
+  let canvasMouse = Mouse.create(canvas.elt);
+  canvasMouse.pixelRatio = pixelDensity();
+  mConstraint = MouseConstraint.create(engine, {
+    mouse: canvasMouse,
+    constraint: { stiffness: 0.2 }
+  });
+  World.add(world, mConstraint);
+}
+
+function crearPalabra() {
+  for (let r of resortes) World.remove(world, r);
+  for (let l of letras) World.remove(world, l);
+  letras = [];
+  resortes = [];
+  
+  let anchoTotal = palabra.length * espacio;
+  let xInicio = width/2 - anchoTotal/2 + espacio/2;
+  let yCentro = height/2;
+  
+  for (let i = 0; i < palabra.length; i++) {
+    let xReposo = xInicio + i * espacio;
+    
+    let caja = Bodies.rectangle(xReposo, yCentro, tamLetra, tamLetra, {
+      frictionAir: 0.003,
+      restitution: 0.6
+    });
+    caja.letra = palabra[i];
+    caja.xReposo = xReposo;
+    caja.yReposo = yCentro;
+    
+    let resorte = Constraint.create({
+      pointA: { x: xReposo, y: yCentro },
+      bodyB: caja,
+      length: 0,
+      stiffness: 0.003,    // ← más blando, dejan dispersarse más
+      damping: 0.05
+    });
+    
+    letras.push(caja);
+    resortes.push(resorte);
+    World.add(world, [caja, resorte]);
+  }
+}
+
+function draw() {
+  background(8);
+  Engine.update(engine);
+  
+  if (!audioListo) return;   // hasta que el usuario haga click
+  
+  let nivelActual = mic.getLevel();
+  nivel = lerp(nivel, nivelActual, 0.4);
+  let hayRuido = nivel > umbral;
+  
+  // Pulso inicial: fuerza más alta
+  if (hayRuido && estabaSilencio) {
+    for (let caja of letras) {
+      let fuerza = 0.15 + nivel * 0.3;
+      Body.applyForce(caja, caja.position, {
+        x: random(-fuerza, fuerza),
+        y: random(-fuerza, fuerza)
+      });
+      Body.setAngularVelocity(caja, random(-0.7, 0.7));
+    }
+    estabaSilencio = false;
+  }
+  
+  // Sostenido
+  if (hayRuido) {
+    for (let caja of letras) {
+      let fuerza = nivel * 0.03;
+      Body.applyForce(caja, caja.position, {
+        x: random(-fuerza, fuerza),
+        y: random(-fuerza, fuerza)
+      });
+    }
+  }
+  
+  if (nivel < umbral * 0.7) estabaSilencio = true;
+  
+  // Silencio: enderezar
+  if (!hayRuido) {
+    for (let caja of letras) {
+      Body.setAngle(caja, caja.angle * 0.92);
+      Body.setAngularVelocity(caja, caja.angularVelocity * 0.9);
+    }
+  }
+  
+  // Dibujar letras (sin caja, solo el carácter)
+  for (let caja of letras) {
+    push();
+    translate(caja.position.x, caja.position.y);
+    rotate(caja.angle);
+    fill(hayRuido ? color(220, 50, 50) : color(240));
+    noStroke();
+    textAlign(CENTER, CENTER);
+    textSize(tamLetra * 1.4);
+    text(caja.letra, 0, 0);
+    pop();
+  }
+}
+
+function mousePressed() {
+  if (!audioListo) {
+    userStartAudio();
+    mic.start();
+    fullscreen(true);    // pantalla completa con el primer click
+    audioListo = true;
+  }
+}
+
+function keyPressed() {
+  if (key === 'r' || key === 'R') {
+    crearPalabra();
+  }
+  if (key === 'f' || key === 'F') {
+    fullscreen(!fullscreen());
+  }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  tamLetra = min(width, height) * 0.07;
+  espacio = tamLetra * 1.1;
+  crearPalabra();
+}
+```
+11. Enlance: https://editor.p5js.org/juanpa1103/sketches/WOu1ugYCV
+
+!2. Captura:
+
+<img width="1735" height="1204" alt="Unidad7_Act5" src="https://github.com/user-attachments/assets/421caf2c-0fd6-4336-ae20-aae14dd5cd72" />
 
 
 ## Bitácora de reflexión
