@@ -76,6 +76,19 @@ Estructura en 4 secciones de ~1 minuto:
 
 ### Actividad 3
 
+1. Componentes y módulos que necesito aprender:
+
+Para reconstruir el sistema en Unity identifiqué cinco bloques mínimos:
+
+- Render pipeline: HDRP. Lo elijo sobre URP porque la pieza depende fuertemente de bloom y postprocesado para la estética Tron, y porque VFX Graph está totalmente soportado en HDRP, mientras que en URP sigue marcado como preview con un subconjunto de plataformas y limitaciones.
+
+- VFX Graph: Es el equivalente de mi sistema de partículas de p5.js, pero corriendo en GPU. La diferencia clave: en lugar de un bucle `for` que recorre agentes, hay tres contexts `Initialize`, `Update`, `Output` donde describo las reglas que aplican a todas las partículas en paralelo. Necesito aprender los bloques Set Position, Set Velocity, Turbulence, Kill, Output Particle Line para tener el sistema mínimo.
+
+- Bloque Turbulence: Resuelve la generación del flow field y el movimiento de las partículas en un solo paso. En p5.js yo generaba la rejilla y los agentes la leían en dos pasos separados; aquí está unificado. Esto es bueno y malo para empezar lo voy a usar como caja negra y si necesito el campo separado más adelante, lo construyo con compute shader.
+
+- LASP + LaspVfx: Es el puente entre audio y visual. LASP captura audio del sistema con baja latencia y lo descompone en bandas (graves, medios, agudos); LaspVfx provee los Property Binders que conectan esos valores con parámetros expuestos del VFX Graph. Sin esto, la pieza no sería audio-reactiva.
+
+
 
 
 ## Bitácora de aplicación 
